@@ -1,21 +1,21 @@
 const {User} = require('../db-associations/customerAssociations')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
-const redisClient = require('../utils/connectReddis')
+// const redisClient = require('../utils/connectReddis')
 require('dotenv').config()
 
 const getAllUsers = async (request , response , next ) =>{
     try {
         const allUsers = await User.findAll()
-         allUsers.forEach(user => {
-         const data  =  redisClient.hGet(user.email )
-           if(!data){
-            redisClient.hSet(user.email, user)
-           }
-           return response.json({
-            allUsers : JSON.parse(data)
-           })
-       })
+    //      allUsers.forEach(user => {
+    //      const data  =  redisClient.hGet(user.email )
+    //        if(!data){
+    //         redisClient.hSet(user.email, user)
+    //        }
+    //        return response.json({
+    //         allUsers : JSON.parse(data)
+    //        })
+    //    })
 
         return   response.json({
             allUsers : allUsers
