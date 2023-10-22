@@ -9,5 +9,4 @@ productRouter.delete('/delete-product/:salesManId/:productId', productController
 productRouter.get('/get-product/rating/:productId', productController.getProductRatings);
 productRouter.get('/all-products', productController.getAllProducts);
 
-
 module.exports = productRouter;
