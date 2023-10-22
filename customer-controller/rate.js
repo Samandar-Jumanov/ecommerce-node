@@ -4,8 +4,8 @@ const sequelize = require("../utils/connectPostrges")
 
 
 const giveRate = async (request , response , next ) =>{
-    const {customerId , productId } = request.params 
-    const {rate , description} = request.body 
+    const {customerId } = request.params 
+    const {rate , description  , productId} = request.body 
 
     let t ;
     try {
@@ -18,7 +18,7 @@ const giveRate = async (request , response , next ) =>{
             })
         }
         const product = await Product.findByPk(productId)
-
+         
         if(!product){
             return response.status(404).json({
                 message :" Product not found "
@@ -48,8 +48,7 @@ const giveRate = async (request , response , next ) =>{
         await product.addProductRate(productRate , { transaction : t })
         await product.save();
         await t.commit();
-
-        return response.json.status(201).json({
+        return response.status(201).json({
             message : "Rate added ",
         })
 

@@ -26,7 +26,7 @@ const getAllUsers = async (request , response , next ) =>{
 }
 
 const Signup = async (request , response , next ) =>{
-    const {username , password , email , role   } =  request.body 
+    const {username , password , email    } =  request.body 
     try {
         const user = await User.findOne({
             where : {email}
@@ -45,7 +45,7 @@ const Signup = async (request , response , next ) =>{
             password : hashedPassword,
             email : email , 
             token : process.env.SECRET_KEY,
-            role :role
+            role :"customer"
         } )
         
        
@@ -58,7 +58,7 @@ const Signup = async (request , response , next ) =>{
             username : newUser.username,
             userId : newUser.id ,
             token :  token,
-            role : role 
+            role : "customer" 
         })
         } catch (error) {
             console.log(error)

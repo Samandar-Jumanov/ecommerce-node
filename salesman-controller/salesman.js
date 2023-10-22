@@ -9,7 +9,7 @@ const createAccount = async (request , response , next ) =>{
         
         const exisitingSalesMan = await Salesman.findOne({
             where : {
-                name :phoneNumber
+                phoneNumber : phoneNumber
             }
         })
 

@@ -34,7 +34,7 @@ const buyProduct = async (request, response , next ) => {
               },
             },
             transfer_data: {
-              destination: salesman.card.number,
+              destination: salesman.cardInfo.cardNumber,
             },
           });
           
