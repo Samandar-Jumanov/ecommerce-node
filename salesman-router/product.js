@@ -10,6 +10,4 @@ productRouter.get('/get-product/rating/:productId', productController.getProduct
 productRouter.get('/all-products', productController.getAllProducts);
 
 
-
-
 module.exports = productRouter;
