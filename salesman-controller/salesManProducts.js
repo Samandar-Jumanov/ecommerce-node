@@ -2,7 +2,14 @@ const {Salesman , Product} = require("../db-associations/salesManAssocitions");
 const sequelize = require("../utils/connectPostrges");
 const  { v4 : uuidv4 } = require('uuid');
 const AWS = require('aws-sdk')
-AWS.config.loadFromPath('C:\\Users\\samandarjumanov\\Desktop\\ecommerce-node\\config-aws.json')
+require('dotenv').config();
+
+AWS.config.update({
+    accessKeyId: process.env.AWS_ACCESKEY_ID,
+    secretAccessKey: process.env.AWS_SECRET_ACCES_KEY,
+    region: process.env.AWS_REGION,
+  });
+
 require('dotenv').config();
 const s3Bucket = new AWS.S3( { params: {Bucket: process.env.AWS_BUCKET_NAME} } );
 

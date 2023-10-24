@@ -1,4 +1,4 @@
-const productController = require('../salesman-controller/products');
+const productController = require('../salesman-controller/salesManProducts');
 const upload = require('../utils/multer');
 const productRouter = require('express').Router();
 

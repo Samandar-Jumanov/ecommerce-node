@@ -23,9 +23,7 @@ app.use('/customer/payments', paymentRouter )
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
 
-
     app.listen(3001, () => {
         console.log('Server  is  listening on port 3001!');
     })
-
 
