@@ -6,7 +6,7 @@ const { Salesman , Product} = require('../db-associations/salesManAssocitions')
 
 const buyProduct = async (request, response , next ) => {
     const {  productId , customerId , salesmanId , cardNum , exp_month, exp_year , cvc } = request.body; 
-  let t ;
+    let t ;
      try {
         t = await sequelize.transaction();
         const product = await Product.findByPk(productId);
@@ -68,14 +68,20 @@ const buyProduct = async (request, response , next ) => {
 }
   
 const seePaymentHistory = async (request, response, next ) =>{
-    const {customerId } = request.body;
+    const {customerId } = request.params;
 
     try {
         const customer = await User.findByPk(customerId)
-        const customerPayment = await customer.getPayment()
-        if(customerPayment.length === 0){
+        if(!customer){
+            return response.status(404).json({
+                message :'Customer not found'
+            })
+        }
+
+        const customerPayment = await customer.getPayments()
+        if(customerPayment === null){
             return response.status(200).json({
-                message :'No payment '
+                message :'No payment history'
             })
         }
         return response.status(200).json({
@@ -83,6 +89,7 @@ const seePaymentHistory = async (request, response, next ) =>{
         })
         
     } catch (error) {
+      next(error)
         
     }
 }

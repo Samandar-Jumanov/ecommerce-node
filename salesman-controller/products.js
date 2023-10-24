@@ -1,11 +1,18 @@
 const {Salesman , Product} = require("../db-associations/salesManAssocitions");
 const sequelize = require("../utils/connectPostrges");
+const  { v4 : uuidv4 } = require('uuid');
+const AWS = require('aws-sdk')
+AWS.config.loadFromPath('C:\\Users\\samandarjumanov\\Desktop\\ecommerce-node\\config-aws.json')
+require('dotenv').config();
+const s3Bucket = new AWS.S3( { params: {Bucket: process.env.AWS_BUCKET_NAME} } );
 
+
+  
 
 const createProducts = async (request , response, next ) =>{
-const {productName , productPrice , productImages , productDescription ,
- salesManId , relasedDate, expirationDate, count } =request.body;
-    let t ;
+const {productName , productPrice  , productDescription ,salesManId , relasedDate, expirationDate, count } =request.body;
+  let t ;
+ const files =request.files;
     try {
         t = await sequelize.transaction();
         const salesMan = await Salesman.findByPk(salesManId);
@@ -16,9 +23,36 @@ const {productName , productPrice , productImages , productDescription ,
             })
         }
 
+          const keys = [];
+
+           for(let i=0; i < files.length; i++) {
+            const uniqueName = uuidv4();
+            const key = `${uniqueName}_${Date.now()}_${files[i].originalname}`;
+            keys.push(key);
+      
+            const uploadParams = {
+                Bucket: process.env.AWS_BUCKET_NAME,
+                Body: files[i].buffer,
+                Key: key,
+                ContentType :files[i].mimetype,
+                ContentEncoding: 'base64',
+              }
+           
+              await  s3Bucket.putObject(uploadParams,  function(err, data){
+                if (err) { 
+                return response.status(500).json({
+                    message : "Failed to upload the image"
+                })
+                } 
+            });
+           }
+
+
+
+      
         const product = await Product.create({
             productName,
-            productImages,
+            productImages : keys,
             productPrice,
             productDescription,
             salesManId,
@@ -42,14 +76,30 @@ const {productName , productPrice , productImages , productDescription ,
 }
 
 
-const getAllProducts = async (request, response, next ) =>{
+const getAllProducts = async (request, response, next) => {
     try {
         const products = await Product.findAll();
-        return response.status(200).json(products);
-    } catch (error) {
-        next(error)
-    }
-}
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+            const productImages = product.productImages;
+    
+            const urls = await Promise.all(
+              productImages.map(async (key) => {
+                const signedUrl = await s3Bucket.getSignedUrl('getObject', {
+                  Key: key,
+                });
+                return signedUrl;
+              })
+            );
+        
+            productImages[i] = urls;
+          }
+
+        return response.status(200).json({ products });
+      } catch (error) {
+        next(error);
+      }
+  };
 
 const getSellerProducts = async (request , response , next ) =>{
     const {salesManId} = request.params;
@@ -67,6 +117,22 @@ const getSellerProducts = async (request , response , next ) =>{
                 message : "You have no products "
             })
         }
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+            const productImages = product.productImages;
+    
+            const urls = await Promise.all(
+              productImages.map(async (image) => {
+                const signedUrl = await s3Bucket.getSignedUrl('getObject', {
+                  Key: image,
+                });
+                return signedUrl;
+              })
+            );
+        
+            productImages[i] = urls;
+          }
+
         return response.status(200).json(products);
     } catch (error) {
         next(error)
@@ -157,6 +223,23 @@ const getProductRatings = async (request , response , next ) =>{
                 message :  "Product has no rates yet "
             })
         }
+
+        for (let i = 0; i < products.length; i++) {
+            const product = products[i];
+            const productImages = product.productImages;
+    
+            const urls = await Promise.all(
+              productImages.map(async (image) => {
+                const signedUrl = await s3Bucket.getSignedUrl('getObject', {
+                  Key: image,
+                });
+                return signedUrl;
+              })
+            );
+        
+            productImages[i] = urls;
+          }
+
 
         return response.status(200).json({
             productRates : productRates

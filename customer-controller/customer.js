@@ -1,96 +1,103 @@
-const {User} = require('../db-associations/customerAssociations')
-const jwt = require('jsonwebtoken')
-const bcrypt = require('bcrypt')
-// const redisClient = require('../utils/connectReddis')
-require('dotenv').config()
+const {User} = require('../db-associations/customerAssociations');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+const redis = require('redis');
+require('dotenv').config();
+
+const redisClient = redis.createClient({
+    password: process.env.REDIS_PASSWORD,
+    socket: {
+        host: process.env.REDIS_HOST,
+        port: process.env.REDIS_PORT,
+    },
+    legacyMode : true,
+})
+
 
 const getAllUsers = async (request , response , next ) =>{
     try {
-        const allUsers = await User.findAll()
-    //      allUsers.forEach(user => {
-    //      const data  =  redisClient.hGet(user.email )
-    //        if(!data){
-    //         redisClient.hSet(user.email, user)
-    //        }
-    //        return response.json({
-    //         allUsers : JSON.parse(data)
-    //        })
-    //    })
+        const allUsers = await User.findAll();
+         allUsers.forEach(user => {
+         const data  =  redisClient.hGet(user.email);
+           if(!data){
+            redisClient.hSet(user.email, user);
+           };
+           return response.json({
+            allUsers : JSON.parse(data)
+           });
+       });
 
         return   response.json({
             allUsers : allUsers
-        })
+        });
     } catch (error) {
         next(error)
-    }
-}
+    };
+};
 
 const Signup = async (request , response , next ) =>{
-    const {username , password , email    } =  request.body 
+    const {username , password , email    } =  request.body;
     try {
         const user = await User.findOne({
             where : {email}
-        } )
+        });
         
         if(user){
             return response.status(409).json({
                 message : 'User already exists '
-            })
-        }
+            });
+        };
 
-        const hashedPassword = await bcrypt.hash(password , 10)
-
+        const hashedPassword = await bcrypt.hash(password , 10);
         const newUser = await User.create({
             username : username ,
             password : hashedPassword,
             email : email , 
             token : process.env.SECRET_KEY,
             role :"customer"
-        } )
-        
-       
+        });
 
-        const token = await jwt.sign({userId : newUser.id}, process.env.SECRET_KEY)
-        newUser.token = token
-        await newUser.save()
+        const token = await jwt.sign({userId : newUser.id}, process.env.SECRET_KEY);
+        newUser.token = token;
+        await newUser.save();
         response.cookie('token', token, { httpOnly: true });
         return response.status(201).json({
             username : newUser.username,
-            userId : newUser.id ,
+            userId : newUser.Id,
             token :  token,
             role : "customer" 
-        })
+        });
         } catch (error) {
-            console.log(error)
+            console.log(error);
             next(error)
-    }
-}
+    };
+};
 
 const Login = async (request , response , next ) =>{
-    const {email , password } = request.body 
+    const {email , password } = request.body;
 
     try {
         const user = await User.findOne({
             where : {email}
-        })
+        });
         
         if(!user){
             return response.status(404).json({
                 message :'User not  found  '
-            })
-        }
+            });
+        };
 
-        const isTruePassword = await bcrypt.compare(password , user.password)
+        const isTruePassword = await bcrypt.compare(password , user.password);
 
         if(!isTruePassword){
             return response.status(409).json({
                 message :'Invalid password '
-            })
-        }
+            });
+        };
 
-        const newToken = await jwt.sign({userId : user.id}, process.env.SECRET_KEY)
-        user.token =  newToken
-        await user.save()
+        const newToken = await jwt.sign({userId : user.Id}, process.env.SECRET_KEY);
+        user.token =  newToken;
+        await user.save();
         response.cookie('token', newToken, { httpOnly: true });
         return response.status(200).json({
             username: user.username ,
@@ -98,16 +105,15 @@ const Login = async (request , response , next ) =>{
             token : newToken, 
             message :'Logged in succesfully'
         })
-
     } catch (error) {
             next(error)        
-    }
-}
+    };
+};
 
 const Logout = async (request, response, next ) =>{
-    const {customerId } = request.params 
+    const {customerId } = request.params;
     try {
-        const user = await User.findByPk(customerId)
+        const user = await User.findByPk(customerId);
         user.token = null
         await response.clearCookie('token')
         await user.save()
@@ -121,32 +127,29 @@ const Logout = async (request, response, next ) =>{
     } 
 
 const changeRole = async (request , response , next ) =>{
-    const {userId , accesCode} = request.params 
+    const {email , password } = request.body;
   
     try {
-        const user = await User.findByPk(userId)
+        const user = await User.findOne({ where : {email}});
 
         if(!user) {
-            return response.status(404).json({
-                message :'User not found '
-            })
+            return response.status(404).json({ message :'User not found ' });
         }
 
-        const userAccesCode = await user.getAccesCode()
-        if(userAccesCode !== accesCode){
-            return response.status(409).json({
-                message : "Incorrect acces code "
-            })
-        }
+        const validPassword = await bcrypt.compare(password, user.password);
+        if(!validPassword){
+            return response.status(409).json({message : "Incorrect acces code "})
+        };
+
         user.role = "salesman"
-        await user.save()
+        await user.save();
         return response.status(201).json({
             message :'Succesfully changed '
-        })
+        });
     } catch (error) {
         next(error)
-    }
-}
+    };
+};
 
 module.exports ={
     Signup,

@@ -1,11 +1,9 @@
 const express = require('express');
 const app = express();
 const customerRouter = require('./customer-router/customerAuth');
-const sequelize = require('./utils/connectPostrges');
 const saveProductsRouter = require('./customer-router/saveProducts');
 const salesmanRouter = require('./salesman-router/salesman');
 const productRouter = require('./salesman-router/product');
-const mailRouter = require('./customer-router/mail');
 const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
 
@@ -18,9 +16,8 @@ app.get('/', (req, res) => {
 //customer 
 app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
-app.use('/customer/mails', mailRouter)
 app.use('/customer/ratings', ratingRouter)
-app.use('/customer//payments', paymentRouter )
+app.use('/customer/payments', paymentRouter )
 
 //salesman 
 app.use('/salesman/auth', salesmanRouter);
