@@ -4,36 +4,36 @@ const bcrypt = require('bcrypt');
 const redis = require('redis');
 require('dotenv').config();
 
-const redisClient = redis.createClient({
-    password: process.env.REDIS_PASSWORD,
-    socket: {
-        host: process.env.REDIS_HOST,
-        port: process.env.REDIS_PORT,
-    },
-    legacyMode : true,
+const redisClient = redis.createClient({url: process.env.REDIS_URL, legacyMode : true });
+
+redisClient.connect().then(()=>{
+    console.log('redis connected ')
+}).catch(err=>{
+    console.log(err)
 })
 
-
-const getAllUsers = async (request , response , next ) =>{
+const getAllUsers = async (request, response, next) => {
     try {
-        const allUsers = await User.findAll();
-         allUsers.forEach(user => {
-         const data  =  redisClient.hGet(user.email);
-           if(!data){
-            redisClient.hSet(user.email, user);
-           };
-           return response.json({
-            allUsers : JSON.parse(data)
-           });
-       });
-
-        return   response.json({
-            allUsers : allUsers
-        });
+      const allUsers = await User.findAll();
+      
+      const usersData = [];
+      for (const user of allUsers) {
+        const data = await redisClient.hGet('users', user.email);
+        if (!data) {
+          await redisClient.hSet('users', user.email, JSON.stringify(user));
+          usersData.push(user);
+        } else {
+          usersData.push(JSON.parse(data));
+        }
+      }
+  
+      return response.json({
+        allUsers: usersData
+      });      
     } catch (error) {
-        next(error)
-    };
-};
+      next(error);
+    }
+  };
 
 const Signup = async (request , response , next ) =>{
     const {username , password , email    } =  request.body;
