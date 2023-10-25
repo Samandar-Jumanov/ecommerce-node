@@ -6,6 +6,7 @@ const salesmanRouter = require('./salesman-router/salesman');
 const productRouter = require('./salesman-router/product');
 const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
+const sequelize = require('./utils/connectPostrges');
 
 app.use(express.json());
 
@@ -23,7 +24,6 @@ app.use('/customer/payments', paymentRouter )
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
 
-    app.listen(3001, () => {
-        console.log('Server  is  listening on port 3001!');
-    })
-
+app.listen(3001, () => {
+    console.log('Server  is  listening on port 3001!');
+})
