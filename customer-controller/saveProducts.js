@@ -1,7 +1,7 @@
 const {User , SavedProducts} = require('../db-associations/customerAssociations');
 const {Product} = require('../db-associations/salesManAssocitions')
 const sequelize = require('../utils/connectPostrges');
-
+const redisClient = require('../utils/connectRedis')
 const saveProducts = async (request, response, next ) =>{
     const {productId , customerId} = request.body
     
@@ -80,15 +80,29 @@ const getCustomerSavedProducts = async (request, response, next ) =>{
     try {
         const customer = await User.findByPk(customerId)
         const customerSavedProducts = await customer.getSavedProducts()
+
+      
         
         if(customerSavedProducts.length === 0){
             return response.status(200).json({
                 message :'No saved products'
             })
         }
+        const savedProducts = [];
+
+        for(const savedProduct of customerSavedProducts){
+          const data = await  redisClient.hGet('savedProducts', savedProduct.Id)
+          if(!data){
+             await redisClient.hSet('savedProducts', savedProduct.Id , savedProduct)
+             savedProducts.push(JSON.parse(data))
+          }else {
+            savedProducts.push(JSON.parse(data))
+          }
+        }
+
 
         return response.status(200).json({
-            savedProducts : customerSavedProducts
+            savedProducts : savedProducts
         })
         
     } catch (error) {

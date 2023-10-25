@@ -2,7 +2,6 @@ const {User} = require('../customer-model/customer')
 const { SavedProducts } = require('../customer-model/savedProducts')
 const { Payment } = require('../customer-model/payments')
 const RateBoughtProducts = require('../customer-model/Rate')
-const RoleAccesCode = require('../customer-model/accesCode')
 
 SavedProducts.belongsTo(User, {
     foreignKey: 'customerId',
@@ -30,14 +29,6 @@ User.hasMany(RateBoughtProducts , {
     as :'rateProducts'
 })
 
-RoleAccesCode.belongsTo(User , {
-    foreignKey :'customerId'
-})
-
-User.hasOne(RoleAccesCode , {
-    foreignKey :'customerId', 
-     as : 'accesCode'
-})
 
 
 
@@ -46,5 +37,4 @@ module.exports = {
     SavedProducts,
     Payment ,
     RateBoughtProducts,
-    RoleAccesCode
 }

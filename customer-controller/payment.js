@@ -3,7 +3,7 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const {User , Payment ,  } = require('../db-associations/customerAssociations');
 const sequelize = require('../utils/connectPostrges');
 const { Salesman , Product} = require('../db-associations/salesManAssocitions')
-
+const redisClient = require('../utils/connectRedis')
 const buyProduct = async (request, response , next ) => {
     const {  productId , customerId , salesmanId , cardNum , exp_month, exp_year , cvc } = request.body; 
     let t ;
@@ -72,6 +72,8 @@ const seePaymentHistory = async (request, response, next ) =>{
 
     try {
         const customer = await User.findByPk(customerId)
+        const paymentData = [];
+
         if(!customer){
             return response.status(404).json({
                 message :'Customer not found'
@@ -84,9 +86,18 @@ const seePaymentHistory = async (request, response, next ) =>{
                 message :'No payment history'
             })
         }
-        return response.status(200).json({
-            payment : customerPayment
-        })
+
+        for(const payment of customerPayment ) {
+        const data = await    redisClient.hGet('customerPayment', payment.Id)
+        if(data){
+          paymentData.push(JSON.parse(data))
+        }else {
+          await  redisClient.hSet('customerPayment', payment.Id , JSON.stringify(payment))
+          paymentData.push(payment)
+        }
+        }
+
+        return response.status(200).json(paymentData)
         
     } catch (error) {
       next(error)
