@@ -21,6 +21,8 @@ Product.hasMany(ProductRates , {
     as :'productRates'
 })
 
+
+
 module.exports ={
     Salesman , 
     Product,

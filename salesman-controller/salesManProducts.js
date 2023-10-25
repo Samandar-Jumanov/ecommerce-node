@@ -18,7 +18,7 @@ const s3Bucket = new AWS.S3( { params: {Bucket: process.env.AWS_BUCKET_NAME} } )
   
 
 const createProducts = async (request , response, next ) =>{
-const {productName , productPrice  , productDescription ,salesManId , relasedDate, expirationDate, count } =request.body;
+const {productName , productPrice  , productDescription ,salesManId , relasedDate, expirationDate, count , catagoryName } =request.body;
   let t ;
  const files =request.files;
     try {
@@ -66,7 +66,8 @@ const {productName , productPrice  , productDescription ,salesManId , relasedDat
             salesManId,
             relasedDate,
             expirationDate,
-            count
+            count,
+            productCatgoryName : catagoryName
          } , { transaction : t });
 
         await salesMan.addProducts(product , { transaction : t });
@@ -87,7 +88,6 @@ const {productName , productPrice  , productDescription ,salesManId , relasedDat
 const getAllProducts = async (request, response, next) => {
     try {
         const productsData = [];
-
         const products = await Product.findAll();
         for( const  product of products ){
             const data = await  redisClient.hGet('products', product.Id)
@@ -162,16 +162,12 @@ const getSellerProducts = async (request , response , next ) =>{
 
         }
 
-
-
         if(products.length === 0) {
             return response.status(200).json({
                 message : "You have no products "
             })
         }
 
-
-     
 
         return response.status(200).json(productsData);
     } catch (error) {

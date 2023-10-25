@@ -39,6 +39,10 @@ const Product = sequelize.define('product', {
     count : {
         type : DataTypes.INTEGER,
         allowNull : false
+    },
+    productCatgoryName : {
+         type : DataTypes.STRING,
+         allowNull : false
     }
 })
 
