@@ -1,11 +1,10 @@
 require('dotenv').config()
-const stripe = require('stripe')
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
 const {User , Payment ,  } = require('../db-associations/customerAssociations');
 const sequelize = require('../utils/connectPostrges');
 const { Product} = require('../db-associations/salesManAssocitions')
 const redisClient = require('../utils/connectRedis')
 
-stripe.setApiKey(process.env.STRIPE_API_KEY , process.env.STRIPE_SECRET_KEY)
 
 const buyProduct = async (request, response , next ) => {
     const {  productId , customerId  , cardNum } = request.body; 
