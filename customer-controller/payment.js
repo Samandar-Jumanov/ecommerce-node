@@ -1,41 +1,23 @@
 require('dotenv').config()
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY)
+const stripe = require('stripe')
 const {User , Payment ,  } = require('../db-associations/customerAssociations');
 const sequelize = require('../utils/connectPostrges');
-const { Salesman , Product} = require('../db-associations/salesManAssocitions')
+const { Product} = require('../db-associations/salesManAssocitions')
 const redisClient = require('../utils/connectRedis')
 
+stripe.setApiKey(process.env.STRIPE_API_KEY , process.env.STRIPE_SECRET_KEY)
 
 const buyProduct = async (request, response , next ) => {
-    const {  productId , customerId , salesmanId , cardNum , exp_month, exp_year , cvc } = request.body; 
+    const {  productId , customerId  , cardNum } = request.body; 
     let t ;
      try {
         t = await sequelize.transaction();
         const product = await Product.findByPk(productId);
         const customer = await User.findByPk(customerId);
-        const salesman = await Salesman.findByPk(salesmanId);
 
-
-    // const token = await stripe.tokens.create({
-    //   card: {
-    //     number: cardNum,
-    //     exp_month: exp_month,
-    //     exp_year: exp_year,
-    //     cvc: cvc,
-    //   },
-    // });
-
-    // const paymentMethod = await stripe.paymentMethods.create({
-    //   type: 'card',
-    //   card: {
-    //     token: token.id,
-    //   },
-    // });
-
-    const paymentIntent = await stripe.paymentIntents.create({
+      const paymentIntent = await stripe.paymentIntents.create({
       amount: product.price,
       currency: process.env.CURRENCY,
-      statement_descriptor: product.name,
       automatic_payment_method :{
         enabled: true,
       }
