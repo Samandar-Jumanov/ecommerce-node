@@ -7,8 +7,11 @@ const productRouter = require('./salesman-router/product');
 const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
 const sequelize = require('./utils/connectPostrges');
+const helmet = require('helmet')
+
 
 app.use(express.json());
+app.use(helmet());
 
 app.get('/', (req, res) => {
     res.send('Hello World!');
