@@ -4,19 +4,6 @@ const sequelize = require('../utils/connectPostrges');
 const amqplib = require('amqplib');
 
 
-
-const connectToRabbitMQ = async () => {
-  try {
-    const connection = await amqplib.connect('amqp://localhost');
-    // Use the connection object to create channels, publish messages, consume messages, etc.
-    console.log('Connected to RabbitMQ');
-  } catch (error) {
-    console.error('Error connecting to RabbitMQ', error);
-  }
-};
-
-connectToRabbitMQ();
-
 const postMessage = async (request , response , next ) =>{
     const {senderUserId, recieverUserId, content} = request.body;
     const random = Math.floor(Math.random() * 10000000);
