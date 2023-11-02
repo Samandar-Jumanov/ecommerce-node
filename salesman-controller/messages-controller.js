@@ -5,6 +5,18 @@ const amqplib = require('amqplib');
 
 
 
+const connectToRabbitMQ = async () => {
+  try {
+    const connection = await amqplib.connect('amqp://localhost');
+    // Use the connection object to create channels, publish messages, consume messages, etc.
+    console.log('Connected to RabbitMQ');
+  } catch (error) {
+    console.error('Error connecting to RabbitMQ', error);
+  }
+};
+
+connectToRabbitMQ();
+
 const postMessage = async (request , response , next ) =>{
     const {senderUserId, recieverUserId, content} = request.body;
     const random = Math.floor(Math.random() * 10000000);
@@ -18,14 +30,10 @@ const postMessage = async (request , response , next ) =>{
         await channel.assertExchange(exchange, 'direct');
         await channel.publish(exchange, log, Buffer.from(content));
         console.log("Message sent ", content)
-        
-        const {error , message } = sendMessage(senderUserId , recieverUserId , content )
-
-        if(error === null ){
             const newMessage =  await Messages.create({
-                senderUserId, //should be salesman id 
-                recieverUserId, ///should be costumer id 
-                message: message,
+                salesmanId :  senderUserId, //should be salesman id 
+                customerId :  recieverUserId, ///should be costumer id 
+                messages: content,
                 costumerStatus: 'recieve',
                 salesmanStatus: 'send'
             } , { transaction : t })
@@ -35,18 +43,12 @@ const postMessage = async (request , response , next ) =>{
             const customer  = await User.findByPk(recieverUserId)
             await salesman.addSalesmanMessages(newMessage , { transaction : t })
             await customer.addCustomerMessages(customerMessages, { transaction : t })
-            
             await t.commit();
 
             response.status(201).json({
                 message : "Sent succesfully"
             })
-
-        }else {
-            return response.status(500).json({
-                message : "Cant send message "
-            })
-        }
+        
         
     }catch(error){
         console.log(error)

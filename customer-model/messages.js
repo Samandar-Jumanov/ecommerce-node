@@ -7,11 +7,11 @@ const CustomerMessages = sequelize.define('messages',{
         primaryKey : true,
         autoIncrement : true
     },
-    senderUserId : {
+    costumerId : {
         type : DataTypes.INTEGER,
         allowNull : false
     },
-    recieverUserId : {
+    salesmanId : {
         type : DataTypes.INTEGER,
         allowNull : false
     },

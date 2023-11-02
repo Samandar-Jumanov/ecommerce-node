@@ -7,15 +7,15 @@ const Messages = sequelize.define('salesmanMessages',{
         primaryKey : true,
         autoIncrement : true
     },
-    senderUserId : {
+    salesmanId : {
         type : DataTypes.INTEGER,
         allowNull : false
     },
-    recieverUserId : {
+    customerId : {
         type : DataTypes.INTEGER,
         allowNull : false
     },
-    messages : {
+    message : {
         type : DataTypes.TEXT,
         allowNull : false
     },
