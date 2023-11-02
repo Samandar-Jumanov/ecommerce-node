@@ -9,6 +9,7 @@ const paymentRouter = require('./customer-router/payment');
 const sequelize = require('./utils/connectPostrges');
 const helmet = require('helmet');
 const messageRouter = require('./salesman-router/messages');
+const customerMessages = require('./customer-router/message');
 
 
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
 app.use('/customer/ratings', ratingRouter)
 app.use('/customer/payments', paymentRouter )
+app.use('/customer/message' , customerMessages)
 
 //salesman 
 app.use('/salesman/auth', salesmanRouter);

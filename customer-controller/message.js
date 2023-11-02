@@ -15,25 +15,24 @@ const postMessage = async (request , response , next ) =>{
         const channel = await connection.createChannel();
         await channel.assertExchange(exchange, 'direct');
         await channel.publish(exchange, log, Buffer.from(content));
-        console.log("Message sent ", content)
 
             const newMessage =  await Messages.create({
-                salesmanId :  senderUserId, 
-                customerId :  recieverUserId, 
+                salesmanId :  recieverUserId, 
+                customerId :  senderUserId, 
                 message: content,
-                costumerStatus: 'recieve',
-                salesmanStatus: 'send'
+                costumerStatus: 'send',
+                salesmanStatus: 'recieve'
             } , { transaction : t })
 
             const salesman = await Salesman.findByPk(recieverUserId)
             await salesman.addSalesmanMessages(newMessage , { transaction : t })
             const costumer = await User.findByPk(recieverUserId)
             const cutomerMessage = await CustomerMessages.create({
-                salesmanId :  senderUserId, 
-                customerId :  recieverUserId, 
+                salesmanId :  recieverUserId, 
+                customerId :  senderUserId, 
                 message: content,
-                costumerStatus:'recieve',
-                salesmanStatus:'send'
+                costumerStatus:'send',
+                salesmanStatus:'recieve'
             })
             await costumer.addCustomerMessages(cutomerMessage, { transaction : t })
             await t.commit();
@@ -50,8 +49,8 @@ const cosumeMessages = async (request, response, next) => {
     const { senderUserId } = request.params;
   
     try {
-      const salesman = await Salesman.findByPk(senderUserId);
-      const salesmanMessages = await salesman.getSalesmanMessages();
+      const salesman = await User.findByPk(senderUserId);
+      const salesmanMessages = await salesman.getCostumerMessages();
   
       if (salesmanMessages.length === 0) {
         return response.status(200).json({
@@ -62,10 +61,10 @@ const cosumeMessages = async (request, response, next) => {
       const messages = [];
   
       for (const message of salesmanMessages) {
-        const data = await redisClient.hGet('salesmanMessages', message.Id);
+        const data = await redisClient.hGet('costumerMessages', message.Id);
   
         if (!data) {
-          await redisClient.hSet('salesmanMessages', message.Id, JSON.stringify(message));
+          await redisClient.hSet('costumerMessages', message.Id, JSON.stringify(message));
           messages.push(message);
         } else {
           messages.push(JSON.parse(data));
