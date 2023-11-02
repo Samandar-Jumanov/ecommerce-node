@@ -17,19 +17,20 @@ const postMessage = async (request , response , next ) =>{
         await channel.assertExchange(exchange, 'direct');
         await channel.publish(exchange, log, Buffer.from(content));
         console.log("Message sent ", content)
+
             const newMessage =  await Messages.create({
-                salesmanId :  senderUserId, //should be salesman id 
-                customerId :  recieverUserId, ///should be costumer id 
-                messages: content,
+                salesmanId :  senderUserId, 
+                customerId :  recieverUserId, 
+                message: content,
                 costumerStatus: 'recieve',
                 salesmanStatus: 'send'
             } , { transaction : t })
 
-            const customerMessages = await CustomerMessages.create(newMessage, { transaction : t })
+            // const customerMessages = await CustomerMessages.create(newMessage, { transaction : t })
             const salesman = await Salesman.findByPk(recieverUserId)
-            const customer  = await User.findByPk(recieverUserId)
+            // const customer  = await User.findByPk(recieverUserId)
             await salesman.addSalesmanMessages(newMessage , { transaction : t })
-            await customer.addCustomerMessages(customerMessages, { transaction : t })
+            // await customer.addCustomerMessages(customerMessages, { transaction : t })
             await t.commit();
 
             response.status(201).json({
