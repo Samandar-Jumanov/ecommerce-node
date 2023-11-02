@@ -11,6 +11,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@elastic/elasticsearch": "^8.10.0",
+    "amqp": "^0.2.7",
     "amqplib": "^0.10.3",
     "aws-sdk": "^2.1480.0",
     "bcrypt": "^5.1.1",

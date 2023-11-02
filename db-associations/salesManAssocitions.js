@@ -1,7 +1,7 @@
 const Salesman = require('../salesman-models/salesman')
 const Product = require('../salesman-models/products')
 const ProductRates = require('../salesman-models/productRates')
-
+const Messages = require('../salesman-models/messages')
 
 Product.belongsTo(Salesman , {
     foreignKey :'salesManId'
@@ -21,10 +21,20 @@ Product.hasMany(ProductRates , {
     as :'productRates'
 })
 
+Messages.belongsTo(Salesman, {
+    foreignKey :'senderUserId'
+})
+
+Salesman.hasMany(Messages , {
+    foreignKey :'senderUserId',
+    as :'salesmanMessages'
+})
+
 
 
 module.exports ={
     Salesman , 
     Product,
-    ProductRates
+    ProductRates,
+    Messages
 }

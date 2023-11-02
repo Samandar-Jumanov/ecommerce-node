@@ -13,7 +13,6 @@ const buyProduct = async (request, response , next ) => {
         t = await sequelize.transaction();
         const product = await Product.findByPk(productId);
         const customer = await User.findByPk(customerId);
-
       const paymentIntent = await stripe.paymentIntents.create({
       amount: product.price,
       currency: process.env.CURRENCY,

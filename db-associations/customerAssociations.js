@@ -2,6 +2,7 @@ const {User} = require('../customer-model/customer')
 const { SavedProducts } = require('../customer-model/savedProducts')
 const { Payment } = require('../customer-model/payments')
 const RateBoughtProducts = require('../customer-model/Rate')
+const CustomerMessages = require('../customer-model/messages')
 
 SavedProducts.belongsTo(User, {
     foreignKey: 'customerId',
@@ -29,6 +30,14 @@ User.hasMany(RateBoughtProducts , {
     as :'rateProducts'
 })
 
+CustomerMessages.belongsTo(User, {
+    foreignKey :'senderUserId'
+})
+
+User.hasMany(CustomerMessages, {
+    foreignKey :'senderUserId',
+    as :'customerMessages'
+})
 
 
 
@@ -37,4 +46,5 @@ module.exports = {
     SavedProducts,
     Payment ,
     RateBoughtProducts,
+    CustomerMessages 
 }
