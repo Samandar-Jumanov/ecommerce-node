@@ -47,7 +47,6 @@ const postMessage = async (request , response , next ) =>{
 }
 const cosumeMessages = async (request, response, next) => {
     const { senderUserId } = request.params;
-  
     try {
       const salesman = await User.findByPk(senderUserId);
       const salesmanMessages = await salesman.getCostumerMessages();

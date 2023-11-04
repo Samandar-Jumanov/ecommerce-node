@@ -37,11 +37,9 @@ const buyProduct = async (request, response , next ) => {
     return response.status(201).json({
         message :"Successfully done ",
     })
-        
      } catch (error) {
         await t.rollback();
         next(error)
-        
      }
 
 }
