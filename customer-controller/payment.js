@@ -13,13 +13,10 @@ const buyProduct = async (request, response , next ) => {
         t = await sequelize.transaction();
         const product = await Product.findByPk(productId);
         const customer = await User.findByPk(customerId);
-      const paymentIntent = await stripe.paymentIntents.create({
-      amount: product.price,
-      currency: process.env.CURRENCY,
-      automatic_payment_method :{
-        enabled: true,
-      }
-    });
+        const paymentIntent = await stripe.paymentIntents.create({
+          amount: product.productPrice, 
+          currency: 'usd',
+        });
 
           if (paymentIntent.error) {
             return response.json({ error: paymentIntent.error.message });
