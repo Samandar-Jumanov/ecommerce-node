@@ -14,7 +14,7 @@ const buyProduct = async (request, response , next ) => {
         const product = await Product.findByPk(productId);
         const customer = await User.findByPk(customerId);
         const paymentIntent = await stripe.paymentIntents.create({
-          amount: product.productPrice, 
+          amount:product.productPrice ,
           currency: 'usd',
         });
 
