@@ -8,7 +8,7 @@ const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
 const sequelize = require('./utils/connectPostrges');
 const helmet = require('helmet');
-const messageRouter = require('./salesman-router/messages');
+// const messageRouter = require('./salesman-router/messages');
 // const customerMessages = require('./customer-router/message');
 const searchRouter = require('./customer-router/searchProduct');
 
