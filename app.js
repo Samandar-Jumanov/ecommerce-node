@@ -9,7 +9,7 @@ const paymentRouter = require('./customer-router/payment');
 const sequelize = require('./utils/connectPostrges');
 const helmet = require('helmet');
 const messageRouter = require('./salesman-router/messages');
-const customerMessages = require('./customer-router/message');
+// const customerMessages = require('./customer-router/message');
 const searchRouter = require('./customer-router/searchProduct');
 
 app.use(express.json());
@@ -24,12 +24,12 @@ app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
 app.use('/customer/ratings', ratingRouter)
 app.use('/customer/payments', paymentRouter )
-app.use('/customer/message' , customerMessages)
+// app.use('/customer/message' , customerMessages)
 app.use('/customer/search', searchRouter)
 //salesman 
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
-app.use('/salesman/message' , messageRouter)
+// app.use('/salesman/message' , messageRouter)
 
 
 app.listen(3001, () => {

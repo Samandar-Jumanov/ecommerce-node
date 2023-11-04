@@ -15,6 +15,7 @@
     "@elastic/elasticsearch": "^8.10.0",
     "@elastic/enterprise-search": "^8.6.0",
     "amqp": "^0.2.7",
+    "amqp-coffee": "^0.1.31",
     "amqplib": "^0.10.3",
     "aws-sdk": "^2.1480.0",
     "axios": "^1.6.0",
@@ -32,6 +33,7 @@
     "pg-hstore": "^2.3.4",
     "redis": "^4.6.10",
     "sequelize": "^6.33.0",
+    "socket.io": "^4.7.2",
     "stripe": "^14.1.0",
     "uuid": "^9.0.1"
   }
