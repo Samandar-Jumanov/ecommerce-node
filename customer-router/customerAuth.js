@@ -1,6 +1,6 @@
 const cutomerRouter = require('express').Router();
 const customerController = require('../customer-controller/customer');
-const authenticateToken = require('../utils/authToken');
+const {authenticateToken} = require('../utils/authToken');
 
 cutomerRouter.post('/signup', customerController.Signup)
 cutomerRouter.post('/login', customerController.Login)

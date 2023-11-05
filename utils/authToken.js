@@ -9,14 +9,14 @@ const  authenticateToken = async (req, res, next) =>  {
     }
     jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
       if (err) {
-        return res.sendStatus(403); // Forbidden
+        return res.sendStatus(403); 
       }
-      req.user = user; // Attach the user object to the request
-      next(); // Pass the request to the next middleware
+      req.user = user; 
+      next(); 
     });
   }
 
-  module.exports = authenticateToken
+  module.exports = {authenticateToken}
 
 
 
