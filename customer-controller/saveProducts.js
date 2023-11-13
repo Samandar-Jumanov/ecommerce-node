@@ -2,6 +2,7 @@ const {User , SavedProducts} = require('../db-associations/customerAssociations'
 const {Product} = require('../db-associations/salesManAssocitions')
 const sequelize = require('../utils/connectPostrges');
 const redisClient = require('../utils/connectRedis')
+
 const saveProducts = async (request, response, next ) =>{
     const {productId , customerId} = request.body
     

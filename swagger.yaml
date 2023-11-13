@@ -131,9 +131,6 @@ paths:
   /customer/payments/buy:
     post:
       summary: Buy Product
-      description: Purchase a product using a customer's ID and card details.
-      tags:
-        - Payments
       security:
         - bearerAuth: []
       requestBody:
@@ -177,9 +174,6 @@ paths:
   /customer/payments/payment-history/{customerId}:
     get:
       summary: View Payment History
-      description: Retrieve the payment history for a specific customer.
-      tags:
-        - Payments
       security:
         - bearerAuth: []
       parameters:
@@ -224,3 +218,177 @@ paths:
                     type: string
               example:
                 message: "Customer not found"
+
+  /customer/search/search:
+    get:
+      summary: Search for products 
+       parameters:
+       - in: query
+         name: searchText
+         required: true
+         description: The text to search for in product names.
+          schema:
+            type: string
+      responses:
+        "200":
+          description: A list of products matching the search criteria.
+          content:
+            application/json:
+       
+
+  #Rate      
+
+  /customer/rate/{customerId}:
+    post:
+      summary: Give a rating to a product
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: customerId
+          in: path
+          description: The ID of the customer giving the rating.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Rating details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                rate:
+                  type: integer
+                description:
+                  type: string
+                productId:
+                  type: integer
+      responses:
+        "201":
+          description: Rating added successfully
+          content:
+            application/json:
+              example:
+                message: "Rate added"
+        "404":
+          description: Customer or product not found
+          content:
+            application/json:
+              example:
+                message: "Customer or product not found"
+        "500":
+          description: An error occurred while processing the rating
+          content:
+            text/plain:
+              example: An error occurred while processing the rating
+
+  
+  #Saved products 
+  /customer/saved/save-product:
+    post:
+      summary: Save a product
+      description: Save a product to the user's list of saved products.
+      requestBody:
+        description: Product save details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                customerId:
+                  type: integer
+      responses:
+        '201':
+          description: Product saved successfully
+          content:
+            application/json:
+              example:
+                message: "Saved"
+        '404':
+          description: Customer or product not found
+          content:
+            application/json:
+              example:
+                message: "Customer or product not found"
+        '500':
+          description: An error occurred while saving the product
+          content:
+            text/plain:
+              example: An error occurred while saving the product
+
+    /customer/saved/remove-product:
+      summary: Remove a saved product
+      description: Remove a product from the user's list of saved products.
+      requestBody:
+        description: Product removal details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                customerId:
+                  type: integer
+                savedProductId:
+                  type: integer
+      responses:
+        '200':
+          description: Product removed successfully
+          content:
+            application/json:
+              example:
+                message: "Removed successfully"
+        '404':
+          description: Customer or saved product not found
+          content:
+            application/json:
+              example:
+                message: "Customer or saved product not found"
+        '500':
+          description: An error occurred while removing the product
+          content:
+            text/plain:
+              example: An error occurred while removing the product
+
+  /customer/saved/get-all-saved/{customerId}:
+    get:
+      summary: Get saved products of a customer
+      description: Get a list of products saved by a specific customer.
+      parameters:
+        - name: customerId
+          in: path
+          description: The ID of the customer.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of saved products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  savedProducts:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        // Define the properties of the saved product
+              example:
+                savedProducts: []
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              example:
+                message: "Customer not found"
+        '500':
+          description: An error occurred while retrieving saved products
+          content:
+            text/plain:
+              example: An error occurred while retrieving saved products
