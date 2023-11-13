@@ -5,14 +5,6 @@ info:
 servers:
   - url: https://ecommerce-api-vhac.onrender.com
 
-tags:
-  - name: Customer
-    description: Operations related to customers
-  - name: User
-    description: Operations related to users
-  - name: Payments
-    description: Operations related to customer payments
-
 paths:
   /customer/auth/signup:
     post:
@@ -135,6 +127,7 @@ paths:
               example:
                 message: "Successfully changed role"
 
+#Payments 
   /customer/payments/buy:
     post:
       summary: Buy Product
