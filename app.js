@@ -12,10 +12,11 @@ const searchRouter = require('./customer-router/searchProduct');
 const YAML = require('yamljs');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = YAML.load('./swagger.yaml'); 
-
+const cors = require('cors')
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(helmet());
+app.use(cors())
 
 app.get('/', (req, res) => {
     res.status(200).json('Hello World!');

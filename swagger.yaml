@@ -1,12 +1,47 @@
 openapi: 3.0.0
 info:
-  title: Ecommerce api
+  title: Ecommece node api
   version: 1.0.0
+servers:
+  - url: http://localhost:3001/
+
 paths:
-  /:
-    get:
-      summary: Returns a greeting
+  /customer/auth/signup:
+    post:
+      summary: User Registration
+      description: Register a new user with the provided username, password, and email.
+      requestBody:
+        description: User registration details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                password:
+                  type: string
+                email:
+                  type: string
       responses:
-        '200':
-          description: A successful response
-  
+        '201':
+          description: User registered successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  userId:
+                    type: integer
+                  token:
+                    type: string
+                  role:
+                    type: string
+              example:
+                username: "john_doe"
+                userId: 1
+                token: "abc123"
+                role: "customer"
