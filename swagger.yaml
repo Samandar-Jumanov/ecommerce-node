@@ -3,7 +3,9 @@ info:
   title: Ecommerce Node API
   version: 1.0.0
 servers:
-  - url: https://ecommerce-api-vhac.onrender.com
+  - url: http://localhost:3001
+
+ 
 
 paths:
   /customer/auth/signup:
@@ -320,7 +322,7 @@ paths:
             text/plain:
               example: An error occurred while saving the product
 
-    /customer/saved/remove-product:
+  /customer/saved/remove-product:
       summary: Remove a saved product
       description: Remove a product from the user's list of saved products.
       requestBody:
@@ -392,3 +394,293 @@ paths:
           content:
             text/plain:
               example: An error occurred while retrieving saved products
+
+
+  /salesman/auth/create-account:
+    post:
+      summary: Create a new salesperson account
+      description: Create a new salesperson account with the provided details.
+      requestBody:
+        description: Salesperson account creation details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                password:
+                  type: string
+                phoneNumber:
+                  type: string
+                cardInfo:
+                  type: object
+                addressInfo:
+                  type: object
+                 
+      responses:
+        '201':
+          description: Salesperson account created successfully
+          content:
+            application/json:
+        '409':
+          description: Account already exists
+          content:
+            application/json:
+              example:
+                message: "Account already exists"
+
+  /salesman/auth/login-account:
+    post:
+      summary: Log in to a salesperson account
+      description: Log in to a salesperson account with the provided phone number and password.
+      requestBody:
+        description: Salesperson login details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                phoneNumber:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              example:
+                message: "Logged in successfully"
+                salesmanInfo:
+                  Id: 1
+                  name: "John Doe"
+                  phoneNumber: "+1234567890"
+                  cardInfo:
+                    // Define the properties of the cardInfo object
+                  addressInfo:
+                    // Define the properties of the addressInfo object
+                  role: "salesman"
+                  token: "newToken123"
+        '404':
+          description: Account not found
+          content:
+            application/json:
+              example:
+                message: "Account not found"
+        '409':
+          description: Invalid password
+          content:
+            application/json:
+             
+  /salesman/auth/logout-account/{salesmanId}:
+    put:
+      summary: Log out of a salesperson account
+      description: Log out of a salesperson account by clearing the authentication token.
+      parameters:
+        - name: salesmanId
+          in: path
+          description: The ID of the salesperson.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Logged out successfully
+          content:
+            application/json:
+              example:
+                message: "Logged out successfully"
+        '404':
+          description: Salesperson not found
+          content:
+            application/json:
+              example:
+                message: "Salesperson not found"
+
+  /salesman/products/create-product:
+    post:
+      summary: Create a new product
+      description: Create a new product with the provided details.
+      requestBody:
+        description: Product creation details
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                productName:
+                  type: string
+                productPrice:
+                  type: number
+                productDescription:
+                  type: string
+                salesManId:
+                  type: integer
+                relasedDate:
+                  type: string
+                  format: date
+                expirationDate:
+                  type: string
+                  format: date
+                count:
+                  type: integer
+                catagoryName:
+                  type: string
+                files:
+                  type: array
+                  items:
+                    type: string
+                    format: binary
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              example:
+                message: "Product created successfully"
+
+  /salesman/products/all-products:
+    get:
+      summary: Get all products
+      description: Get a list of all products with details.
+      responses:
+        '200':
+          description: List of products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productsData:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        // Define the properties of the product object
+              example:
+                productsData: []
+
+  /salesman/products/get-salesman-products/{salesManId}:
+    get:
+      summary: Get seller products
+      description: Get a list of products associated with a specific salesperson.
+      parameters:
+        - name: salesManId
+          in: path
+          description: The ID of the salesperson.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of seller products
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    // Define the properties of the seller product object
+              example:
+                sellerProducts: []
+
+  /salesman/products/update-product/{salesManId}/{productId}:
+    put:
+      summary: Update product
+      description: Update details of a specific product.
+      parameters:
+        - name: salesManId
+          in: path
+          description: The ID of the salesperson.
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product.
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: Updated product details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productBody:
+                  type: object
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  // Define the properties of the updated product
+              example:
+                // Example of updated product data
+
+  /salesman/products/delete-product/{salesManId}/{productId}:
+    delete:
+      summary: Delete product
+      description: Delete a specific product.
+      parameters:
+        - name: salesManId
+          in: path
+          description: The ID of the salesperson.
+          required: true
+          schema:
+            type: integer
+        - name: productId
+          in: path
+          description: The ID of the product.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Product deleted successfully
+          content:
+            application/json:
+              example:
+                message: "Deleted successfully"
+
+  /salesman/products/get-product/rating/{productId}:
+    get:
+      summary: Get product ratings
+      description: Get the ratings of a specific product.
+      parameters:
+        - name: productId
+          in: path
+          description: The ID of the product.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of product ratings
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  productRates:
+                    type: array
+                    items:
+                      type: object
+              example:
+                productRates: []
+        '404':
+          description: Product not found or no ratings available
+          content:
+            application/json:
+              example:
+                message: "Product not found or no ratings available"

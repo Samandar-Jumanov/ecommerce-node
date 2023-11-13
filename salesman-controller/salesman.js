@@ -98,8 +98,9 @@ const loginAccount = async (request, response, next ) =>{
 }
 
 const Logout = async (request, response, next ) =>{
+    const {salesmanId} = request.params
     try {
-        const salesman = await Salesman.findByPk(request.params)
+        const salesman = await Salesman.findByPk(salesmanId)
         salesman.token = null
 
         return response.clearCookie('token').status(200).json({
