@@ -1,9 +1,17 @@
 openapi: 3.0.0
 info:
-  title: Ecommece node api
+  title: Ecommerce Node API
   version: 1.0.0
 servers:
-  - url: http://localhost:3001/
+  - url: https://ecommerce-api-vhac.onrender.com
+
+tags:
+  - name: Customer
+    description: Operations related to customers
+  - name: User
+    description: Operations related to users
+  - name: Payments
+    description: Operations related to customer payments
 
 paths:
   /customer/auth/signup:
@@ -45,3 +53,181 @@ paths:
                 userId: 1
                 token: "abc123"
                 role: "customer"
+
+  /customer/auth/login:
+    post:
+      summary: User Login
+      description: Log in with the provided email and password.
+      requestBody:
+        description: User login details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Logged in successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  username:
+                    type: string
+                  userId:
+                    type: integer
+                  token:
+                    type: string
+                  message:
+                    type: string
+              example:
+                username: "john_doe"
+                userId: 1
+                token: "newToken123"
+                message: "Logged in successfully"
+
+  /customer/auth/logout/{customerId}:
+    put:
+      summary: User Logout
+      description: Log out the user with the specified customerId.
+      parameters:
+        - name: customerId
+          in: path
+          description: The ID of the user to log out.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Logged out successfully
+          content:
+            application/json:
+              example:
+                message: "Logged out successfully"
+
+  /customer/auth/change-role:
+    put:
+      summary: Change User Role
+      description: Change the role of a user with the provided email and password.
+      requestBody:
+        description: User role change details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: Role changed successfully
+          content:
+            application/json:
+              example:
+                message: "Successfully changed role"
+
+  /customer/payments/buy:
+    post:
+      summary: Buy Product
+      description: Purchase a product using a customer's ID and card details.
+      tags:
+        - Payments
+      security:
+        - bearerAuth: []
+      requestBody:
+        description: Product purchase details
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                productId:
+                  type: integer
+                customerId:
+                  type: integer
+                cardNum:
+                  type: string
+      responses:
+        '201':
+          description: Successfully purchased product
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Successfully done"
+        '400':
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+              example:
+                error: "Invalid card details"
+
+  /customer/payments/payment-history/{customerId}:
+    get:
+      summary: View Payment History
+      description: Retrieve the payment history for a specific customer.
+      tags:
+        - Payments
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: customerId
+          in: path
+          description: The ID of the customer.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    Id:
+                      type: integer
+                    customerId:
+                      type: integer
+                    product:
+                      type: object
+                      properties:
+                        // Define the properties of the product
+                    status:
+                      type: string
+                    accesCode:
+                      type: integer
+                    card:
+                      type: string
+        '404':
+          description: Customer not found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+              example:
+                message: "Customer not found"
