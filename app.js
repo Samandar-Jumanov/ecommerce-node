@@ -9,12 +9,16 @@ const paymentRouter = require('./customer-router/payment');
 const sequelize = require('./utils/connectPostrges');
 const helmet = require('helmet');
 const searchRouter = require('./customer-router/searchProduct');
+const YAML = require('yamljs');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = YAML.load('./swagger.yaml'); 
 
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(helmet());
 
 app.get('/', (req, res) => {
-    res.send('Hello World!');
+    res.status(200).json('Hello World!');
 })
 
 //customer 

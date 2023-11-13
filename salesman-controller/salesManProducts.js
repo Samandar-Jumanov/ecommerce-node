@@ -113,8 +113,6 @@ const getAllProducts = async (request, response, next) => {
             }else {
                 productsData.push(JSON.parse(data))
             }
-
-
         }
      
 
