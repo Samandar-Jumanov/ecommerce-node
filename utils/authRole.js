@@ -1,12 +1,15 @@
-const authRole = () =>{
-    return (req, res, next) =>{
-        if(req.user.role === 'salesman'){
-            next()
-        }else{
-            res.status(403).json({message: 'This page is not for you '})
-        }
+
+const authRole = (request , response , next ) =>{
+    const { role } = request.headers;
+    if (role && role === 'admin') {
+      next();
+    } else {
+      response.status(403).json({
+        message: 'Unauthorized access.',
+      });
     }
 }
+
 module.exports = {
     authRole
 }

@@ -500,10 +500,21 @@ paths:
               example:
                 message: "Salesperson not found"
 
+
   /salesman/products/create-product:
     post:
       summary: Create a new product
       description: Create a new product with the provided details.
+      security:
+        - bearerAuth: []
+        - role: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
       requestBody:
         description: Product creation details
         required: true
@@ -520,7 +531,7 @@ paths:
                   type: string
                 salesManId:
                   type: integer
-                relasedDate:
+                releasedDate:
                   type: string
                   format: date
                 expirationDate:
@@ -528,7 +539,7 @@ paths:
                   format: date
                 count:
                   type: integer
-                catagoryName:
+                categoryName:
                   type: string
                 files:
                   type: array
@@ -547,6 +558,16 @@ paths:
     get:
       summary: Get all products
       description: Get a list of all products with details.
+      security:
+        - bearerAuth: []
+        - role: []
+      parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
       responses:
         '200':
           description: List of products
@@ -568,7 +589,16 @@ paths:
     get:
       summary: Get seller products
       description: Get a list of products associated with a specific salesperson.
+      security:
+        - bearerAuth: []
+        - role: []
       parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
         - name: salesManId
           in: path
           description: The ID of the salesperson.
@@ -593,7 +623,16 @@ paths:
     put:
       summary: Update product
       description: Update details of a specific product.
+      security:
+        - bearerAuth: []
+        - role: []
       parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
         - name: salesManId
           in: path
           description: The ID of the salesperson.
@@ -632,7 +671,16 @@ paths:
     delete:
       summary: Delete product
       description: Delete a specific product.
+      security:
+        - bearerAuth: []
+        - role: []
       parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
         - name: salesManId
           in: path
           description: The ID of the salesperson.
@@ -657,7 +705,16 @@ paths:
     get:
       summary: Get product ratings
       description: Get the ratings of a specific product.
+      security:
+        - bearerAuth: []
+        - role: []
       parameters:
+        - name: Authorization
+          in: header
+          required: true
+          schema:
+            type: string
+            description: Bearer token
         - name: productId
           in: path
           description: The ID of the product.
