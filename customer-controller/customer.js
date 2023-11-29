@@ -111,7 +111,6 @@ const Logout = async (request, response, next ) =>{
         return response.status(200).json({
             message: 'Logged out successfully',
           });
-
         } catch (error) {
           next(error);
         }

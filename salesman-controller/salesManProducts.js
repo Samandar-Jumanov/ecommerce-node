@@ -11,6 +11,7 @@ AWS.config.update({
     region: process.env.AWS_REGION,
   });
 
+
 require('dotenv').config();
 const s3Bucket = new AWS.S3( { params: {Bucket: process.env.AWS_BUCKET_NAME} } );
 
@@ -51,7 +52,7 @@ const {productName , productPrice  , productDescription ,salesManId , relasedDat
                 return response.status(500).json({
                     message : "Failed to upload the image"
                 })
-                } 
+                }  
             });
            }
 
