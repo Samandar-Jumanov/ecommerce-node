@@ -32,6 +32,8 @@ app.use('/customer/search', searchRouter)
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
 
-app.listen(3001, () => {
-    console.log('Server  is  listening on port 3001!');
-})
+sequelize.sync().then(()=>{
+    app.listen(3001, () => {
+        console.log('Server  is  listening on port 3001!');
+    })
+}).catch(err => console.log(err))

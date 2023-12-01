@@ -1,5 +1,4 @@
 const ratingController = require('../customer-controller/rate');
-const { authenticateToken } = require('../utils/authToken');
 const ratingRouter = require('express').Router();
 const {authenticateToken} = require('../utils/authToken');
 
