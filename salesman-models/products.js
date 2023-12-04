@@ -43,6 +43,10 @@ const Product = sequelize.define('product', {
     productCatgoryName : {
          type : DataTypes.STRING,
          allowNull : false
+    },
+    productCaseId :{
+        type : DataTypes.INTEGER,
+        allowNull : false 
     }
 })
 

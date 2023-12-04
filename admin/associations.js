@@ -12,7 +12,8 @@ Admin.hasMany(ProductCase , {
 
 Product.belongsTo(ProductCase, {
     foreignKey :'productCaseId'
-})
+});
+
 ProductCase.hasMany(Product , {
     foreignKey : "productCaseId" , as :'products'
 })

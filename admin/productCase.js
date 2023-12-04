@@ -1,7 +1,4 @@
-// make an crud operation 
-// only admin can crud one of these 
-// an product case should be unique 
-const sequelize = require('../utils/connectPostgres')
+const sequelize = require("../utils/connectPostrges");
 const {ProductCase , Admin} = require('./associations');
 
 const createProductCase = async (request , response , next ) =>{
@@ -10,7 +7,7 @@ const createProductCase = async (request , response , next ) =>{
     try{
         if (!productCaseName || !adminId) {
             return response.status(400).json({
-                message: 'Productcase / adminId   is required',
+                message: 'Productcas e / adminId   is required',
             });
         }
 
@@ -37,9 +34,9 @@ const createProductCase = async (request , response , next ) =>{
  
         const newProductCase = await ProductCase.create({
             adminId : adminId ,
-            productCaseName : productCaseName 
+            productCaseName : productCaseName
         } , { transaction : t  });
-        
+
         await admin.addProductCases(newProductCase , {transaction :t })
         await admin.save();
         await t.commit();

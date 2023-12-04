@@ -13,7 +13,7 @@ const YAML = require('yamljs');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = YAML.load('./swagger.yaml'); 
 const cors = require('cors')
-
+const adminRouter = require('./admin/router')
 //middlewares 
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -34,9 +34,12 @@ app.use('/customer/search', searchRouter)
 //salesman 
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
+app.use('/admin', adminRouter)
 
 sequelize.sync().then(()=>{
     app.listen(3001, () => {
         console.log('Server  is  listening on port 3001!');
     })
-}).catch(err => console.log(err))
+}).catch(err=>{
+    console.log(`${err.stack}  ${err.message}`)
+})
