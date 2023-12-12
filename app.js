@@ -8,7 +8,6 @@ const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
 const helmet = require('helmet');
 const searchRouter = require('./customer-router/searchProduct');
-const YAML = require('yamljs');
 const cors = require('cors')
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
@@ -18,19 +17,21 @@ app.use(express.json());
 app.use(helmet());
 app.use(cors())
 
-
-
 //customer 
+
 app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
 app.use('/customer/ratings', ratingRouter)
 app.use('/customer/payments', paymentRouter )
 app.use('/customer/search', searchRouter)
+
 //salesman 
+
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
 
 //admin 
+
 app.use('/admin', adminRouter)
 
 //start the engine 
