@@ -9,12 +9,8 @@ Admin.hasMany(ProductType , {
     foreignKey : "adminId" , as :'productCases'
 })
 
-
-
-
 module.exports = {
     ProductType ,
     Admin 
-   
 };
 

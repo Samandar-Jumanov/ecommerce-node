@@ -4,11 +4,11 @@ const sequelize = require("../utils/connectPostrges");
 const { DataTypes } = require('sequelize')
 
 const ProductType = sequelize.define("productType",{
-     Id : {
-        type : DataTypes.INTEGER,
-        primaryKey : true ,
-        autoIncreament : true,
-    },
+    //  Id : {
+    //     type : DataTypes.INTEGER,
+    //     primaryKey : true ,
+    //     autoIncreament : true,
+    // },
     productCaseName : {
         type : DataTypes.STRING ,
         allowNull : false 

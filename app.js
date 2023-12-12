@@ -9,21 +9,16 @@ const paymentRouter = require('./customer-router/payment');
 const helmet = require('helmet');
 const searchRouter = require('./customer-router/searchProduct');
 const YAML = require('yamljs');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = YAML.load('./swagger.yaml'); 
 const cors = require('cors')
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 
 //middlewares 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(helmet());
 app.use(cors())
 
-app.get('/', (req, res) => {
-    res.status(200).json('Hello World!');
-})
+
 
 //customer 
 app.use('/customer/auth', customerRouter)
@@ -39,9 +34,7 @@ app.use('/salesman/products', productRouter)
 app.use('/admin', adminRouter)
 
 //start the engine 
-app.listen(3001 , ()=>{
-    console.log("Server is listening 3001")
-})
+app.listen(3001 , ()=> console.log("Server started"))
 
 
 module.exports = app

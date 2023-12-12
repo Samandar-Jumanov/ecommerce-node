@@ -50,7 +50,6 @@ const createProductCase = async (request , response , next ) =>{
         }
  
         const newProductCase = await ProductType.create({
-            Id : 3,
             adminId : adminId ,
             productCaseName : productCaseName
         } , { transaction  : t  });
