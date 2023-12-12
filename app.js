@@ -19,6 +19,10 @@ app.use(cors())
 
 //customer 
 
+app.get('/', (request , response)=>{
+    response.status(200).send("Hello world")
+})
+
 app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
 app.use('/customer/ratings', ratingRouter)
