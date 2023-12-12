@@ -6,16 +6,15 @@ const salesmanRouter = require('./salesman-router/salesman');
 const productRouter = require('./salesman-router/product');
 const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
-const sequelize = require('./utils/connectPostrges');
 const helmet = require('helmet');
 const searchRouter = require('./customer-router/searchProduct');
 const YAML = require('yamljs');
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = YAML.load('./swagger.yaml'); 
 const cors = require('cors')
-const adminRouter = require('./admin/router')
-//middlewares 
+const adminRouter = require('./admin/router');
 
+//middlewares 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use(express.json());
 app.use(helmet());
@@ -34,12 +33,12 @@ app.use('/customer/search', searchRouter)
 //salesman 
 app.use('/salesman/auth', salesmanRouter);
 app.use('/salesman/products', productRouter)
+
+//admin 
 app.use('/admin', adminRouter)
 
-sequelize.sync().then(()=>{
-    app.listen(3001, () => {
-        console.log('Server  is  listening on port 3001!');
-    })
-}).catch(err=>{
-    console.log(`${err.stack}  ${err.message}`)
+
+
+app.listen(3001, () => {
+    console.log('Server  is  listening on port 3001!');
 })

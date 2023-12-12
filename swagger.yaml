@@ -673,7 +673,7 @@ paths:
       description: Delete a specific product.
       security:
         - bearerAuth: []
-        - role: []
+        - role: string
       parameters:
         - name: Authorization
           in: header

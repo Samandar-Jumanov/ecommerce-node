@@ -226,9 +226,10 @@ const deleteProduct = async (request, response, next ) =>{
                 message : "Product not found"
             })
         }
+        
+        await product.destroy();
         await salesman.save()
 
-        await product.destroy();
         return response.json({
            message :'Deleted succefully'
         })
