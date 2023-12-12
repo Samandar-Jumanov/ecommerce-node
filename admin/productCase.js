@@ -19,9 +19,10 @@ const getAllProductCases  = async (request , response , next ) =>{
 
 const createProductCase = async (request , response , next ) =>{
     const {adminId , productCaseName } = request.body;
-    let  t 
+    let  t;
     try{
-        // t = await sequelize.transaction();
+        t = await sequelize.transaction();
+
         if (!productCaseName || !adminId) {
             return response.status(400).json({
                 message: 'Productcase/ adminId   is required',
@@ -35,31 +36,31 @@ const createProductCase = async (request , response , next ) =>{
         })
 
         if(isCaseExist){
-            return response.status(404).json({
+            return response.status(400).json({
                 message :"Product case is already created "
             })
         }
     
-        // const admin = await Admin.findByPk(adminId);
+        const admin = await Admin.findByPk(adminId);
 
-        // if(!admin){
-        //     return response.status(400).json({
-        //         message :'Admin id required'
-        //     })
-        // }
+        if(!admin){
+            return response.status(400).json({
+                message :'Admin id required'
+            })
+        }
  
         const newProductCase = await ProductType.create({
-            Id : 2 ,
+            Id : 3,
             adminId : adminId ,
             productCaseName : productCaseName
-        } , { transaction : t  });
+        } , { transaction  : t  });
        
-        // console.log(newProductCase)
-        // await admin.addProductCases(newProductCase , {transaction :t })
-        // await admin.save();
-        // await t.commit();
+        console.log(newProductCase)
+        await admin.addProductCases(newProductCase , {transaction :t })
+        await admin.save();
+        await t.commit();
 
-        // console.log(admin)
+        console.log(admin)
 
         return response.status(201).json({
             message :' Created ',
@@ -67,9 +68,9 @@ const createProductCase = async (request , response , next ) =>{
         
 
     }catch(err){
-        // await t.rollback();
+        await t.rollback();
         return response.status(500).json({
-            message: `Internal server error: ${err.message}`,
+            message: `Internal server error: ${err}`,
         });
     };
 };

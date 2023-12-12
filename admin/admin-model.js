@@ -28,10 +28,6 @@ const Admin = sequelize.define('admin', {
         type : DataTypes.STRING ,
         allowNull : false 
      },
-     picKey : {
-        type : DataTypes.STRING,
-        allowNull : false 
-     },
      role : {
         type : DataTypes.STRING,
         allowNull : false 
@@ -41,16 +37,6 @@ const Admin = sequelize.define('admin', {
         allowNull : false 
      }
 })
-
-async function removePcKey () {
-   try {
-       await Admin.removeAttribute('picKey');
-       console.log('Attribute "picKey" removed successfully.');
-   } catch (error) {
-       console.error('Error removing attribute "picKey":', error);
-   }
-}
-removePcKey();
 
 module.exports = {
     Admin
