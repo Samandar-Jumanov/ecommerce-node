@@ -2,6 +2,8 @@ const Salesman = require('../salesman-models/salesman')
 const Product = require('../salesman-models/products')
 const ProductRates = require('../salesman-models/productRates')
 const Messages = require('../salesman-models/messages')
+const {ProductType} = require('../admin/associations');
+
 
 Product.belongsTo(Salesman , {
     foreignKey :'salesManId'
@@ -30,11 +32,19 @@ Salesman.hasMany(Messages , {
     as :'salesmanMessages'
 })
 
+Product.belongsTo(ProductType, {
+    foreignKey :'productCaseId'
+});
+
+ProductType.hasMany(Product , {
+    foreignKey : "productCaseId" , as :'products'
+})
 
 
 module.exports ={
     Salesman , 
     Product,
     ProductRates,
-    Messages
+    Messages,
+    ProductType
 }

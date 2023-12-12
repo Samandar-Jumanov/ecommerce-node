@@ -3,11 +3,11 @@
 const sequelize = require("../utils/connectPostrges");
 const { DataTypes } = require('sequelize')
 
-const ProductCase = sequelize.define("productCase",{
-    Id : {
+const ProductType = sequelize.define("productType",{
+     Id : {
         type : DataTypes.INTEGER,
         primaryKey : true ,
-        autoIncreament : true 
+        autoIncreament : true,
     },
     productCaseName : {
         type : DataTypes.STRING ,
@@ -20,4 +20,4 @@ const ProductCase = sequelize.define("productCase",{
 });
 
 
-module.exports = {ProductCase} 
+module.exports = {ProductType} ;

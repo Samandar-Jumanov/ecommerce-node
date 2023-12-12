@@ -39,10 +39,9 @@ app.use('/salesman/products', productRouter)
 app.use('/admin', adminRouter)
 
 //start the engine 
-
-    app.listen(3001 , ()=>{
-        console.log("Server is working ");
-    })
+app.listen(3001 , ()=>{
+    console.log("Server is listening 3001")
+})
 
 
 module.exports = app
