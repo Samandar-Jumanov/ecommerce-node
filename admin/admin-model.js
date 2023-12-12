@@ -42,6 +42,16 @@ const Admin = sequelize.define('admin', {
      }
 })
 
+async function removePcKey () {
+   try {
+       await Admin.removeAttribute('picKey');
+       console.log('Attribute "picKey" removed successfully.');
+   } catch (error) {
+       console.error('Error removing attribute "picKey":', error);
+   }
+}
+removePcKey();
+
 module.exports = {
     Admin
 }

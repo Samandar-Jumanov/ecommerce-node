@@ -13,6 +13,7 @@ const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = YAML.load('./swagger.yaml'); 
 const cors = require('cors')
 const adminRouter = require('./admin/router');
+const sequelize = require('./utils/connectPostrges');
 
 //middlewares 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
@@ -37,8 +38,11 @@ app.use('/salesman/products', productRouter)
 //admin 
 app.use('/admin', adminRouter)
 
+//start the engine 
+
+    app.listen(3001 , ()=>{
+        console.log("Server is working ");
+    })
 
 
-app.listen(3001, () => {
-    console.log('Server  is  listening on port 3001!');
-})
+module.exports = app
