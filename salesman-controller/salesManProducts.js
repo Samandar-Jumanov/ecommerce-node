@@ -251,21 +251,17 @@ const getProductRatings = async (request , response , next ) =>{
                 message : "Product has been removed or wrong info ! "
             })
         }
-
         const productRates = await product.getProductRates()
         const productRatesData = [];
-
-        
         for (let i = 0; i < productRates.length; i++) {
-            
-            const data = await redisClient.hGet('productRatings', productRates[i].Id)
+            const data = await redisClient.hGet('productRating', productRates[i].Id)
             if(data){
                 productRatesData.push(JSON.parse(data))
               }
 
             if(!data){
             const productRate = productRates[i];
-            redisClient.hSet('productRating', productRate.Id , JSON.stringify(productRate))
+             await  redisClient.hSet('productRating', productRate.Id , JSON.stringify(productRate))
           }
         }
           

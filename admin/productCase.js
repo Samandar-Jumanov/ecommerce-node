@@ -1,21 +1,31 @@
 const sequelize = require("../utils/connectPostrges");
 const {ProductType , Admin} = require('./associations');
+const redisClient = require('../utils/connectRedis')
 
 
-
-const getAllProductCases  = async (request , response , next ) =>{
-     try{
+const getAllProductCases = async (request, response, next) => {
+    try {
         const allProductCases = await ProductType.findAll();
-        return response.status(200).json({
-            allProductCases 
-        })
+        const productCasesData = [];
 
-     }catch(err){
+        for (let i = 0; i < allProductCases.length; i++) {
+            const data = await redisClient.hGet('productCase', allProductCases[i].id); // Fix the typo here
+            if (!data) {
+                await redisClient.hSet('productCase', allProductCases[i].id, JSON.stringify(allProductCases[i]));
+            } else {
+                productCasesData.push(JSON.parse(data));
+            }
+        }
+
+        return response.status(200).json({
+            productCasesData
+        });
+    } catch (err) {
         return response.status(500).json({
-            message : `Internal server error ${err.message}`
-        })
-     }
-}
+            message: `Internal server error ${err.message}`
+        });
+    }
+};
 
 const createProductCase = async (request , response , next ) =>{
     const {adminId , productCaseName } = request.body;
