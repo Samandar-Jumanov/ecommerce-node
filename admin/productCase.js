@@ -9,16 +9,16 @@ const getAllProductCases = async (request, response, next) => {
         const productCasesData = [];
 
         for (let i = 0; i < allProductCases.length; i++) {
-            const data = await redisClient.hGet('productCase', allProductCases[i].id); // Fix the typo here
+            const data = await redisClient.hGet('productCase', allProductCases[i].id); 
             if (!data) {
                 await redisClient.hSet('productCase', allProductCases[i].id, JSON.stringify(allProductCases[i]));
+                productCasesData.push(allProductCases[i])
             } else {
                 productCasesData.push(JSON.parse(data));
             }
         }
-
         return response.status(200).json({
-            productCasesData
+             productCasesData
         });
     } catch (err) {
         return response.status(500).json({
@@ -68,9 +68,6 @@ const createProductCase = async (request , response , next ) =>{
         await admin.addProductCases(newProductCase , {transaction :t })
         await admin.save();
         await t.commit();
-
-        console.log(admin)
-
         return response.status(201).json({
             message :' Created ',
         })
@@ -79,7 +76,7 @@ const createProductCase = async (request , response , next ) =>{
     }catch(err){
         await t.rollback();
         return response.status(500).json({
-            message: `Internal server error: ${err}`,
+            message: `Internal server error: ${err.message}`,
         });
     };
 };
@@ -97,7 +94,7 @@ const deleteProductCase = async (request , response , next ) =>{
                 message :' Cannot find admin'
             })
         }
-        const productCase = await ProductType.findByPk(productCaseId)
+    const productCase = await ProductType.findByPk(productCaseId)
            
     if(!productCase){
         return response.status(404).json({
@@ -109,7 +106,7 @@ const deleteProductCase = async (request , response , next ) =>{
     await admin.save();
     return response.status(200).json({
         message :'Deleted succefully'
-    })
+    });
     }catch(err){
       return response.status(500).json({
         message :` Internal server error ${err.message}`
@@ -141,7 +138,7 @@ const updateProductCase = async (request , response , next ) =>{
          
          await productCase.update(request.body, { transaction : t })
          await admin.save();
-        t.commit();
+         t.commit();
         return response.status(200).json({
             message :' Updated succesfully'
         })

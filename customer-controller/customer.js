@@ -89,6 +89,7 @@ const Login = async (request , response , next ) =>{
         const newToken = await jwt.sign({userId : user.Id}, process.env.SECRET_KEY);
         user.token =  newToken;
         await user.save();
+        
         response.cookie('token', newToken, { httpOnly: true });
         return response.status(200).json({
             username: user.username ,

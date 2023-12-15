@@ -83,7 +83,7 @@ const loginAccount = async (request, response, next ) =>{
         Id : existingAdmin.Id,
         name : existingAdmin.name,
         surname : existingAdmin.surname,
-        role : "salesman",
+        role : "admin",
         token : token 
     }
     response.cookie('token', token, { httpOnly: true });
