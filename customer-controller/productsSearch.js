@@ -1,4 +1,3 @@
-const axios = require('axios');
 require('dotenv').config();
 const {Product} = require('../db-associations/salesManAssocitions');
 const client = require('../utils/connectElastic')
@@ -21,7 +20,6 @@ const searchProducts = async (request, response, next) => {
     const allProducts = searchResult.hits.hits.map((hit) => hit._source.name);
     return response.status(200).json(allProducts);
   } catch (error) {
-    console.error('Error searching for products:', error);
     response.status(500).send('An error occurred while searching for products.');
   }
 };

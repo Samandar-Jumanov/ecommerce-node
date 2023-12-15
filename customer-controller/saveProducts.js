@@ -81,8 +81,6 @@ const getCustomerSavedProducts = async (request, response, next ) =>{
     try {
         const customer = await User.findByPk(customerId)
         const customerSavedProducts = await customer.getSavedProducts()
-
-      
         
         if(customerSavedProducts.length === 0){
             return response.status(200).json({
@@ -100,8 +98,6 @@ const getCustomerSavedProducts = async (request, response, next ) =>{
             savedProducts.push(JSON.parse(data))
           }
         }
-
-
         return response.status(200).json({
             savedProducts : savedProducts
         })

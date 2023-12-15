@@ -108,7 +108,7 @@ const Logout = async (request, response, next ) =>{
             })
         };
 
-        admin.token = "null";
+        admin.token = "";
         await admin.save();
 
         return response.clearCookie('token').status(200).json({

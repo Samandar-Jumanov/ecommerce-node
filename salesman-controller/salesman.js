@@ -17,7 +17,7 @@ const createAccount = async (request , response , next ) =>{
             return response.status(409).json({
                 message : 'Account already exists'
             })
-        }
+        };
         const hashedPassword  = await bcrypt.hash(password, 10)
         const newSalesman = await Salesman.create({
             name : name ,
@@ -34,7 +34,7 @@ const createAccount = async (request , response , next ) =>{
         await   newSalesman.save()
 
        const  salesmanInfo = {
-           Id  : newSalesman.Id,
+            Id  : newSalesman.Id,
             name : name ,
             phoneNumber : phoneNumber,
             cardInfo : cardInfo,
@@ -67,7 +67,7 @@ const loginAccount = async (request, response, next ) =>{
         })
     }
 
-    const isTruePassword = await bcrypt.compare(password, exisitingSalesMan.password)
+    const isTruePassword = await bcrypt.compare(password, exisitingSalesMan.password);
     if(!isTruePassword) {
         return response.status(409).json({
             message : 'Invalid password'
@@ -79,7 +79,7 @@ const loginAccount = async (request, response, next ) =>{
     await exisitingSalesMan.save()
     const  salesmanInfo = {
         Id : exisitingSalesMan.Id,
-        name : exisitingSalesMan.name ,
+        name : exisitingSalesMan.name,
         phoneNumber :exisitingSalesMan.phoneNumber,
         cardInfo :exisitingSalesMan.cardInfo,
         addressInfo : exisitingSalesMan.addressInfo,
