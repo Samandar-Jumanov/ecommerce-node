@@ -65,7 +65,7 @@ const loginAccount = async (request, response, next ) =>{
         return response.status(404).json({
             message : 'Account not found'
         })
-    }
+    };
 
     const isTruePassword = await bcrypt.compare(password, existingAdmin.password)
     const isTrueSecretKey = await bcrypt.compare(companySecretKey , existingAdmin.companySecretKey)
