@@ -5,7 +5,8 @@ const client = require('../utils/connectElastic')
 const searchProducts = async (request, response, next) => {
   const { searchText } = request.query;
   try {
-    const products = await Product.findAll()
+    const products = await Product.findAll();
+    
     await client.helpers.bulk({
       datasource: products,
       pipeline: process.env.ELASTIC_PIPELINE,
