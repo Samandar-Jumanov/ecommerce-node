@@ -12,11 +12,13 @@ const cors = require('cors')
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 const redisClient = require('./utils/connectRedis');
+const morgan = require('morgan');
 
 //middlewares 
 app.use(express.json());
 app.use(helmet());
 app.use(cors())
+app.use(morgan("dev"))
 
 //customer 
 
