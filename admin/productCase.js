@@ -84,7 +84,7 @@ const createProductCase = async (request , response , next ) =>{
 
 
 const deleteProductCase = async (request , response , next ) =>{
-    const {adminId , productCaseId} = request.body ;
+    const {adminId , productCaseId} = request.params;
     let t ;
     try{
 

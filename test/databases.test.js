@@ -5,7 +5,7 @@ const sequelize = require('../utils/connectPostrges')
 describe("It should connect Redis", () => {
   it("Connect redis", async () => {
      try{
-         await redisClient.connect();
+           await redisClient.connect();
            console.log("Redis connection established")
      }catch(err){
            console.log("Could not connect Redis : ", err)

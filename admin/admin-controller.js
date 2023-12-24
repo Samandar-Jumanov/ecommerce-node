@@ -1,4 +1,4 @@
-const {Admin} = require('./admin-model')
+const {Admin} = require('./associations');
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 require('dotenv').config()
@@ -12,14 +12,17 @@ const createAccount = async (request , response , next ) =>{
             where : {
                   email : email 
             }
-        })
+        });
+
 
         if(existingAdmin){
             return response.status(409).json({
                 message : 'Account already exists'
             })
         }
-        const hashedPassword  = await bcrypt.hash(password, 10)
+
+        const hashedPassword  = await bcrypt.hash(password, 10);
+
         const newAdmin = await Admin.create({
             name : name ,
             surname : surname,
