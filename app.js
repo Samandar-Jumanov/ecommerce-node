@@ -43,15 +43,13 @@ app.use('/admin', adminRouter)
 
 
 // Sequelize connection 
-sequelize.sync().then(res => {
-    console.log(res)
-}).then(err =>{
-    console.log(err)
-})
+// sequelize.sync().then(res => {
+//     console.log(res)
+// }).then(err =>{
+//     console.log(err)
+// })
 
-//Redis connection 
-redisClient.connect().then(res => console.log(res))
-.catch(err => console.log(err));
+
 
 //start the engine 
 app.listen(3001 , ()=> console.log("Server started"))
