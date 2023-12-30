@@ -8,7 +8,6 @@ const ratingRouter = require('./customer-router/rating');
 const paymentRouter = require('./customer-router/payment');
 const helmet = require('helmet');
 const searchRouter = require('./customer-router/searchProduct');
-const cors = require('cors')
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 const redisClient = require('./utils/connectRedis');
@@ -19,7 +18,6 @@ const cors = require('cors')
 //middlewares 
 app.use(express.json());
 app.use(helmet());
-app.use(cors())
 app.use(morgan("dev"))
 
 app.use(cors({
