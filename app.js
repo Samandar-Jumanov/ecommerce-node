@@ -13,12 +13,21 @@ const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 const redisClient = require('./utils/connectRedis');
 const morgan = require('morgan');
+const cors = require('cors')
+
 
 //middlewares 
 app.use(express.json());
 app.use(helmet());
 app.use(cors())
 app.use(morgan("dev"))
+
+app.use(cors({
+    origin: '*',
+    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    methods: 'GET, POST, PUT, DELETE',
+    credentials: true, 
+}))
 
 //customer 
 
