@@ -93,7 +93,8 @@ const loginAccount = async (request, response, next ) =>{
     return response.status(200).json({
         message : 'Logged in succesfully',
         adminInfo
-    })
+    });
+    
  } catch (error) {
     next(error)
  }
