@@ -21,8 +21,8 @@ app.use(helmet());
 app.use(morgan("dev"))
 
 app.use(cors({
-    origin: '*',
-    allowedHeaders: 'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+    origin: 'http://localhost:3000/',
+    allowedHeaders: '*',
     methods: 'GET, POST, PUT, DELETE',
     credentials: true,
 }))
