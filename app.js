@@ -11,12 +11,10 @@ const searchRouter = require('./customer-router/searchProduct');
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 const redisClient = require('./utils/connectRedis');
-const { swaggerUi, specs } = require('./swagger');
+
 const morgan = require('morgan');
 const cors = require('cors')
-  
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 //middlewares 
 app.use(express.json());
 app.use(helmet());
