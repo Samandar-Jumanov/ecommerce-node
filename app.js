@@ -11,6 +11,7 @@ const searchRouter = require('./customer-router/searchProduct');
 const adminRouter = require('./admin/router');
 const sequelize = require('./utils/connectPostrges');
 const redisClient = require('./utils/connectRedis');
+const path = require('path')
 
 const morgan = require('morgan');
 const cors = require('cors')
@@ -18,6 +19,7 @@ const cors = require('cors')
 //middlewares 
 app.use(express.json());
 app.use(helmet());
+app.use('/api/docs' , express.static(path.join( __dirname , 'public')))
 app.use(morgan("dev"))
 
 const corsOptions = {
@@ -31,9 +33,9 @@ app.use(cors(corsOptions));
 
 
 
-app.get('/', (request , response)=>{
-    response.status(200).send("Hello world")
-})
+// app.get('/', (request , response)=>{
+//     response.status(200).send("Hello world")
+// })
 
 app.use('/customer/auth', customerRouter)
 app.use('/customer/saved', saveProductsRouter);
