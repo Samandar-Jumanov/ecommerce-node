@@ -21,9 +21,10 @@ app.use(helmet());
 app.use(morgan("dev"))
 
 app.use(cors({
-    origin: 'http://localhost:3000',
-    methods: ['GET', 'POST','PUT','DELETE'],
-}))
+    origin: ['http://localhost:3000', 'https://your-production-app.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 
 //customer 
 
@@ -44,7 +45,7 @@ app.use('/salesman/products', productRouter)
 
 //admin 
 
-app.use('/admin', adminRouter , cors())
+app.use('/admin', adminRouter )
 
 
 // Sequelize connection 
