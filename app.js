@@ -20,11 +20,15 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"))
 
-app.use(cors({
-        origin: '*', 
-        methods: ['GET', 'POST' , 'PUT', 'DELETE']  , 
-        allowedHeaders: ['Content-Type', 'Authorization']
-}))
+const corsOptions = {
+    "origin": "*",
+    "methods": "GET,HEAD,PUT,PATCH,POST,DELETE",
+    "preflightContinue": false,
+    "optionsSuccessStatus": 204
+  }
+
+app.use(cors(corsOptions));
+
 
 
 app.get('/', (request , response)=>{
