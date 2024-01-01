@@ -21,7 +21,12 @@ app.use(helmet());
 app.use(morgan("dev"))
 
 app.use(cors())
-
+function enablecorsMiddleware(_, res, next) {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+  }
+  
+app.use(enablecorsMiddleware);
 //customer 
 
 app.get('/', (request , response)=>{
