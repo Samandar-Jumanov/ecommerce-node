@@ -20,14 +20,12 @@ app.use(express.json());
 app.use(helmet());
 app.use(morgan("dev"))
 
-app.use(cors())
-function enablecorsMiddleware(_, res, next) {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    next();
-  }
-  
-app.use(enablecorsMiddleware);
-//customer 
+app.use(cors({
+        origin: '*', 
+        methods: ['GET', 'POST' , 'PUT', 'DELETE']  , 
+        allowedHeaders: ['Content-Type', 'Authorization']
+}))
+
 
 app.get('/', (request , response)=>{
     response.status(200).send("Hello world")
