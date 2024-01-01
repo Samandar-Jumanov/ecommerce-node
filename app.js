@@ -44,7 +44,7 @@ app.use('/salesman/products', productRouter)
 
 //admin 
 
-app.use('/admin', adminRouter)
+app.use('/admin', adminRouter , cors())
 
 
 // Sequelize connection 
