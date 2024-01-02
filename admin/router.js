@@ -11,7 +11,7 @@ adminRouter.post('/auth/logout/:adminId', authenticateToken ,  adminController.L
 //product cases
 adminRouter.post('/product-case/create',authenticateToken ,  productCaseController.createProductCase)
 adminRouter.delete('/product-case/delete/:adminId/:productCaseId', authenticateToken, productCaseController.deleteProductCase)
-adminRouter.get('/product-cases/all' ,authenticateToken , productCaseController.getAllProductCases)
+adminRouter.get('/product-cases/all' , authenticateToken , productCaseController.getAllProductCases)
 adminRouter.put('/product-cases/update/:adminId/:productCaseId',authenticateToken , productCaseController.updateProductCase)
 
 
