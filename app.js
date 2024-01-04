@@ -15,10 +15,10 @@ const path = require('path')
 
 setInterval(()=>{
   console.log("Wake up , render ")
-} , 1000);
+} , 10000);
 
 const morgan = require('morgan');
-const cors = require('cors')
+const cors = require('cors');
 
 //middlewares 
 app.use(express.json());
