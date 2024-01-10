@@ -8,10 +8,11 @@ const getAllUsers = async (request, response, next) => {
     try {
       const allUsers = await User.findAll();
       const usersData = [];
+
       for (const user of allUsers) {
         const data = await redisClient.hGet('users', user.email);
         if (!data) {
-          await redisClient.hSet('users', user.email, JSON.stringify(user));
+          await redisClient.hSet('users', user.email, JSON.stringify(user) , );
           usersData.push(user);
         } else {
           usersData.push(JSON.parse(data));

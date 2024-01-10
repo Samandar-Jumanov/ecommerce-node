@@ -16,6 +16,7 @@ const saveProducts = async (request, response, next ) =>{
                 message :'Product not found '
             })
         }
+
         const customer = await User.findByPk(customerId)
         
          if(!customer) {
@@ -87,12 +88,13 @@ const getCustomerSavedProducts = async (request, response, next ) =>{
                 message :'No saved products'
             })
         }
+        
         const savedProducts = [];
 
         for(const savedProduct of customerSavedProducts){
           const data = await  redisClient.hGet('savedProducts', savedProduct.Id)
           if(!data){
-             await redisClient.hSet('savedProducts', savedProduct.Id , savedProduct)
+             await redisClient.hSet('savedProducts', savedProduct.Id , savedProduct , );
              savedProducts.push(JSON.parse(data))
           }else {
             savedProducts.push(JSON.parse(data))

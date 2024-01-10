@@ -22,6 +22,4 @@ redisClient.on('error', (err) => {
     }
 })();
 
-
-
 module.exports = redisClient;
